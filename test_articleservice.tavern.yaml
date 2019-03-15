@@ -1,0 +1,94 @@
+# test_articleservice.tavern.yaml
+
+---
+
+test_name: Try to post an article without authenticating
+
+stages:
+  - name: Make sure that the user is authenticated to post an article to the database
+    request:
+      url: http://127.0.0.1:5200/postarticle
+      json:
+        title: "SAMPLE TEST TITLE"
+        content: "Sample content for testing"
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Try to post an article using the wrong password
+
+stages:
+  - name: Make sure that the user logs in with right passsword to post an article
+    request:
+      url: http://127.0.0.1:5200/postarticle
+      auth:
+          - shrutitaware@csu.fullerton.edu
+          - wrongpassword
+      json:
+        title: "SAMPLE TEST TITLE"
+        content: "Sample content for testing"
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Post an article successfully
+
+stages:
+  - name: Make sure that the article is posted successfully with user being authorized to do so
+    request:
+      url: http://127.0.0.1:5200/postarticle
+      auth:
+        - shrutitaware@csu.fullerton.edu
+        - shruti1
+      json:
+        title: "SAMPLE TEST TITLE"
+        content: "Sample content for testing"
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Retrieve the newly posted article
+
+stages:
+  - name: Make sure that the article posted with recent content is displayed
+
+    request:
+      url: http://127.0.0.1:5200/recentarticle?recent=1
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+---
+
+test_name: Check that the newly posted article is the most recent
+
+stages:
+  - name: Make sure that the newly posted article matches with the recent article based on its ID
+    request:
+      url: http://127.0.0.1:5200/recentarticle?recent=1
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      body:
+        [
+          {
+            "content": "Sample content for testing",
+            "title": "SAMPLE TEST TITLE"
+          }
+        ]

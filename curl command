@@ -1,0 +1,111 @@
+Curl command
+
+
+create user
+
+curl -i -H "Content-Type: application/json" -X POST  http://127.0.0.1:5000/createuser -d '{"name": "karan", "email": "karan@gmail.com", "password":"abc"}'
+
+curl -i -H "Content-Type: application/json" -X POST  http://127.0.0.1:5000/createuser -d '{"name": "shailavi", "email": "shailavi@gmail.com", "password":"def"}'
+
+curl -i -H "Content-Type: application/json" -X POST  http://127.0.0.1:5000/createuser -d '{"name": "samit", "email": "samit@gmail.com", "password":"ghi"}'
+
+————————————————————————————
+
+DeleteUser
+
+curl -i -u karan@gmail.com:abc -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/deleteuser
+
+curl -i -u shailavi@gmail.com:def -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/deleteuser
+
+curl -i -u samit@gmail.com:ppp -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5000/deleteuser
+
+————————————————————————————
+
+update password
+
+curl -i -u samit@gmail.com:ghi -H "Content-Type: application/json" -X PATCH http://127.0.0.1:5000/updatepassword -d '{"new_password":"ppp"}'
+
+————————————————————————————
+
+Create Article
+
+curl -i -u shailavi@gmail.com:def -H "Content-Type: application/json" -X POST http://127.0.0.1:5200/postarticle -d '{"title":"second title","content":"second Content"}'
+
+curl -i -u karan@gmail.com:abc -H "Content-Type: application/json" -X POST http://127.0.0.1:5200/postarticle -d '{"title":"karan title","content":"karan Content"}'
+
+curl -i -u samit@gmail.com:ghi -H "Content-Type: application/json" -X POST http://127.0.0.1:5200/postarticle -d '{"title”:”samit second title","content”:”samit second Content"}'
+
+————————————————————————————
+
+get article
+
+curl -i -H "Content-Type: application/json" -X GET http://127.0.0.1:5200/articles/2
+
+————————————————————————————
+
+edit article
+
+curl -i -u karan@gmail.com:abc -H "Content-Type: application/json" -X PATCH http://127.0.0.1:5200/editarticle?articleid=1 -d '{"title": "samit second title","content":"samit second Content"}'
+
+————————————————————————————
+
+delete article
+
+curl -i -u karan@gmail.com:abc -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5200/deletearticle?articleid=1
+
+————————————————————————————
+
+recent article
+
+curl -i -H "Content-Type: application/json" -X GET http://127.0.0.1:5200/recentarticle?recent=3
+
+————————————————————————————
+
+meta article
+
+curl -i -H "Content-Type: application/json" -X GET http://127.0.0.1:5200/metaarticle?recent=3
+
+————————————————————————————
+
+add comment
+
+curl -i -u samit@gmail.com:ghi -H "Content-Type: application/json" -X POST http://127.0.0.1:5100/articles/2/addcomment -d '{"comment_content":"first comment"}'
+
+————————————————————————————
+
+count comment
+
+curl -i -H "Content-Type: application/json" -X GET http://127.0.0.1:5100/articles/2/comments/countcomment
+
+————————————————————————————
+
+delete comment
+
+curl -i -u shailavi@gmail.com:def -H "Content-Type: application/json" -X DELETE http://127.0.0.1:5100/deletecomment?commentid=12
+
+————————————————————————————
+
+recent comments
+
+curl -i -H "Content-Type: application/json" -X GET http://127.0.0.1:5100/articles/2/comments/recentcomments?recent=3
+
+————————————————————————————
+
+add tag
+
+curl -u shrutitaware@csu.fullerton.edu:shruti1 -H "Content-Type: application/json" -X POST -d '{"tag":"csuf","articleId":"52"}' http://127.0.0.1:5300/tag/addtag
+————————————————————————————
+
+delete addtag
+
+curl -u shrutitaware@csu.fullerton.edu:shruti1 -H "Content-Type: application/json" -X DELETE -d '{"tag":"csuf","articleId":"52"}' http://127.0.0.1:5300/tag/deletetag
+————————————————————————————
+
+retrive tags
+
+curl -H "Content-Type: application/json" -X GET http://127.0.0.1:5300/tag/gettag/52
+————————————————————————————
+
+retrive urls
+
+curl -H "Content-Type: application/json" -X GET http://127.0.0.1:5300/tag/getarticles/csuf

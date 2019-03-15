@@ -1,0 +1,78 @@
+---
+
+test_name: Try to add a comment to an article that doesn’t exist
+
+stages:
+  - name: make sure it should give not allow you to add comment
+    request:
+      url: http://127.0.0.1:5100/articles/99999/addcomment
+      auth:
+        - shrutitaware@gmail.com
+        - shruti1
+      json:
+        comment_content: this is 1st article comment
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 409
+
+---
+
+
+
+test_name: Post an anonymous comment on an article
+
+stages:
+  - name: Make sure author of that comment is anonymous coward
+    request:
+      url: http://127.0.0.1:5100/articles/1/addcomment
+      auth:
+        - shrutitaware@gmail.com
+        - wrongpassword
+      json:
+        comment_content: this is my anonymous comment
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Post an authenticated comment on an article
+
+stages:
+  - name: Make sure author of the comment is user email
+    request:
+      url: http://127.0.0.1:5100/articles/1/addcomment
+      auth:
+        - shrutitaware@gmail.com
+        - shruti1
+      json:
+        comment_content: this is new comment
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+
+---
+
+test_name: Check that the comments on the article were returned in order
+
+stages:
+  - name: Make sure comments are displayed in reverse chronological order
+    request:
+      url: http://127.0.0.1:5100/articles/1/comments/recentcomments?recent=1
+      method: GET
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+      body:
+        [
+          {
+            "comment_content": "this is new comment"
+          }
+        ]

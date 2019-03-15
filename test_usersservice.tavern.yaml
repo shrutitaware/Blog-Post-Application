@@ -1,0 +1,92 @@
+---
+
+test_name: Create a user
+
+stages:
+  - name: Make sure that new user has unique emailID than ones in the database
+
+    request:
+      url: http://127.0.0.1:5000/createuser
+      json:
+        name: karan
+        email: karan@csu.fullerton.edu
+        password: karan1
+      method: POST
+      headers:
+        content-type: application/json
+    response:
+      status_code: 201
+---
+
+test_name: Change the user’s password
+
+stages:
+  - name: Make sure that the desired user's password is changed and that it exits in the database
+    request:
+      url: http://127.0.0.1:5000/updatepassword
+      auth:
+        - karan@csu.fullerton.edu
+        - karan1
+      json:
+        new_password: alice1
+      method: PATCH
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+
+---
+
+test_name: Try to change the password for a user that does not exist
+
+stages:
+  - name: Make sure that the user exits in the database for which the password is to be updated/ changed
+    request:
+      url: http://127.0.0.1:5000/updatepassword
+      auth:
+        - mk@csu.fullerton.edu
+        - mk
+      json:
+        new_password: mynewpass
+      method: PATCH
+      headers:
+        content-type: application/json
+    response:
+      status_code: 401
+
+---
+
+test_name: Delete the user
+
+stages:
+  - name: Make sure that the user to be deleted exists in the database
+    request:
+      url: http://127.0.0.1:5000/deleteuser
+      auth:
+        - karan@csu.fullerton.edu
+        - alice1
+      method: DELETE
+      headers:
+        content-type: application/json
+    response:
+      status_code: 200
+
+---
+
+test_name: Try to change the password for the deleted user
+
+stages:
+  - name: Make sure that the deleted user's password cannot be updated/changed
+    request:
+        url: http://127.0.0.1:5000/upatepassword
+        auth:
+          - karan@csu.fullerton.edu
+          - karan1
+        json:
+          new_password: alice1
+        method: PATCH
+        headers:
+          content-type: application/json
+    response:
+      status_code: 404
